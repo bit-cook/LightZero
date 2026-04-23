@@ -793,7 +793,7 @@ class RepresentationNetworkMLP(nn.Module):
     """
     def __init__(
             self,
-            observation_dim: int,
+            observation_shape: int,
             hidden_channels: int = 64,
             num_layers: int = 2,
             activation: nn.Module = nn.GELU(approximate='tanh'),
@@ -803,7 +803,7 @@ class RepresentationNetworkMLP(nn.Module):
     ) -> torch.Tensor:
         """
         Arguments:
-            - observation_dim (:obj:`int`): The dimension of the input vector observation.
+            - observation_shape (:obj:`int`): The dimension of the input vector observation.
             - hidden_channels (:obj:`int`): The number of neurons in the hidden and output layers.
             - num_layers (:obj:`int`): The total number of layers in the MLP.
             - activation (:obj:`nn.Module`): The activation function to use.
@@ -815,7 +815,7 @@ class RepresentationNetworkMLP(nn.Module):
         hidden_layers = [hidden_channels] * (num_layers - 1) if num_layers > 1 else []
         
         self.fc_representation = MLP_V2(
-            in_channels=observation_dim,
+            in_channels=observation_shape,
             hidden_channels=hidden_layers,
             out_channels=hidden_channels,
             activation=activation,
@@ -837,7 +837,7 @@ class RepresentationNetworkMLP(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Shapes:
-            - x (:obj:`torch.Tensor`): (B, observation_dim)
+            - x (:obj:`torch.Tensor`): (B, observation_shape)
             - output (:obj:`torch.Tensor`): (B, hidden_channels)
         """
         x = self.fc_representation(x)
